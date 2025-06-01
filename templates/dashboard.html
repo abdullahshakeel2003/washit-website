@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-4" style="max-width: 600px;">
+    <h2 class="text-center mb-4">BOOK AN APPOINTMENT</h2>
+
+    {% if categories %}
+    <div>
+        <label for="category-select" class="form-label"> </label>
+        <select id="category-select" class="form-select mb-3" required>
+            <option value="" disabled selected>Choose a category</option>
+            {% for cat in categories %}
+            <option value="{{ cat['id'] }}" data-rate="{{ cat['rate'] }}">{{ cat['name'] }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div id="booking-section" style="display:none;">
+        <h4 id="selected-category-name"></h4>
+        <p>Rate: <span id="selected-category-rate"></span> PKR</p>
+        <form id="booking-form" method="post">
+            <input type="date" name="date" required class="form-control mb-2">
+            <input type="time" name="time" required class="form-control mb-3">
+            <button type="submit" class="btn btn-primary">Book</button>
+        </form>
+    </div>
+    {% else %}
+    <p class="text-center">No car categories available at the moment.</p>
+    {% endif %}
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const categorySelect = document.getElementById('category-select');
+    const bookingSection = document.getElementById('booking-section');
+    const selectedCategoryName = document.getElementById('selected-category-name');
+    const selectedCategoryRate = document.getElementById('selected-category-rate');
+    const bookingForm = document.getElementById('booking-form');
+
+    categorySelect.addEventListener('change', function() {
+        const selectedOption = categorySelect.options[categorySelect.selectedIndex];
+        const catId = categorySelect.value;
+        const catName = selectedOption.text;
+        const catRate = selectedOption.getAttribute('data-rate');
+
+        selectedCategoryName.textContent = catName;
+        selectedCategoryRate.textContent = catRate;
+        bookingForm.action = `/book/${catId}`;
+
+        bookingSection.style.display = 'block';
+    });
+});
+</script>
+{% endblock %}

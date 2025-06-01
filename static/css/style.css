@@ -1,0 +1,78 @@
+/* Base body style for all pages */
+body {
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
+
+/* Sign-in page background and layout */
+body.signin-page {
+    position: relative;
+    background:
+        linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+        url('/static/css/logo.jpeg') no-repeat center center fixed;
+    background-size: cover;
+    color: white;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+}
+
+/* Sign-in page container */
+body.signin-page .container-fluid {
+    min-height: 90vh;
+}
+
+/* Left side info panel */
+body.signin-page .col-md-6:first-child {
+    background: linear-gradient(135deg, rgba(13,110,253,0.75), rgba(102,16,242,0.75));
+    padding: 3rem;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Right side sign-in form card */
+body.signin-page .col-md-6:last-child {
+    background-color: rgba(255, 255, 255, 0.4);
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Glass effect box for info panel */
+.glass-box {
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    max-width: 450px;
+    width: 100%;
+    padding: 1.5rem 2rem;
+}
+
+/* Glass effect card for sign-in form */
+.glass-card {
+    background: rgba(255, 255, 255, 0.4);
+    color: #000;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 400px;
+    padding: 1.5rem 2rem;
+}
+
+/* Default card style for other pages */
+.card.bg-white.text-dark.p-4.shadow.rounded {
+    border-radius: 12px;
+}

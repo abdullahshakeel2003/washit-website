@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block inner_content %}
+<div class="container-fluid">
+    <div class="row g-0 h-100">
+
+        <!-- Left Side: Info Panel -->
+        <div class="col-md-6 d-flex flex-column justify-content-center align-items-center p-5">
+            <div class="glass-box text-center">
+                <h1 class="mb-4 fw-bold">🚘 WASH'IT</h1>
+                <h4 class="mb-3">Revolutionizing Your Car Wash Experience</h4>
+                <p>
+                    Our cutting-edge mobile app brings expert car washing and detailing straight 
+                    to your home, office, or wherever you are — no more waiting in lines!
+                </p>
+                <ul class="list-unstyled mt-3">
+                    <li class="mb-2">✅ Easy Online Booking</li>
+                    <li class="mb-2">✅ Real-Time Tracking</li>
+                    <li class="mb-2">✅ Secure In-App Payments</li>
+                    <li class="mb-2">✅ Personalized, Quality Service</li>
+                </ul>
+                <p class="mt-3">
+                    Join us in bringing convenience, flexibility, and pride back to car care.
+                </p>
+            </div>
+        </div>
+
+        <!-- Right Side: Signin Form -->
+        <div class="col-md-6 d-flex justify-content-center align-items-center p-4">
+            <div class="glass-card">
+                <h3 class="text-center mb-4">Sign In to WASH'IT</h3>
+
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                <div>
+                    {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% endwith %}
+
+                <form action="{{ url_for('signin') }}" method="POST" class="mb-3">
+                    <div class="mb-3">
+                        <input type="email" class="form-control" name="email" placeholder="Email" required />
+                    </div>
+                    <div class="mb-3">
+                        <input type="password" class="form-control" name="password" placeholder="Password" required />
+                    </div>
+                    <button class="btn btn-primary w-100" type="submit">Sign In</button>
+                </form>
+
+                <div class="d-flex justify-content-between mb-3">
+                    <a href="{{ url_for('signup') }}" class="btn btn-outline-primary w-100 me-2">Sign Up</a>
+                </div>
+
+                <form action="{{ url_for('guest') }}" method="POST">
+                    <button class="btn btn-outline-secondary w-100" type="submit">Continue as Guest</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

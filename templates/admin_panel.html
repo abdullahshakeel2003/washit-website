@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Admin Panel - All Appointments</h2>
+
+    <!-- Filter Dropdown -->
+    <div class="mb-3">
+        <label for="statusFilter" class="form-label">Filter by Status:</label>
+        <select id="statusFilter" class="form-select">
+            <option value="all">All</option>
+            <option value="pending">Pending</option>
+            <option value="active">Active</option>
+            <option value="completed">Completed</option>
+        </select>
+    </div>
+
+    {% if appointments %}
+    <table class="table table-dark table-striped" id="appointmentsTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>User Name</th>
+                <th>Car Category</th>
+                <th>Rate (PKR)</th>
+                <th>Status</th>
+                <th>Start Time</th>
+                <th>Update Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for appt in appointments %}
+            <tr data-status="{{ appt['status'] }}">
+                <td>{{ appt['id'] }}</td>
+                <td>{{ appt['user_name'] }}</td>
+                <td>{{ appt['category_name'] }}</td>
+                <td>{{ appt['rate'] }}</td>
+                <td>{{ appt['status'] }}</td>
+                <td>{{ appt['start_time'] or 'N/A' }}</td>
+                <td>
+                    <a href="{{ url_for('update_status', appointment_id=appt['id'], status='active') }}" class="btn btn-sm btn-success">Set Active</a>
+                    <a href="{{ url_for('update_status', appointment_id=appt['id'], status='completed') }}" class="btn btn-sm btn-primary">Set Completed</a>
+                    <form action="{{ url_for('delete_appointment', appointment_id=appt['id']) }}" method="post" style="display:inline;">
+                         <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this appointment?');"> Delete
+                         </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No appointments found.</p>
+    {% endif %}
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const statusFilter = document.getElementById('statusFilter');
+    const tableRows = document.querySelectorAll('#appointmentsTable tbody tr');
+
+    statusFilter.addEventListener('change', function() {
+        const selected = this.value;
+        tableRows.forEach(row => {
+            const rowStatus = row.getAttribute('data-status');
+            if (selected === 'all' || rowStatus === selected) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

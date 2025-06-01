@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">My Appointments</h2>
+
+    <!-- Tabs -->
+    <ul class="nav nav-tabs" id="appointmentsTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="pending-tab" data-bs-toggle="tab" href="#pending" role="tab">Pending</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="active-tab" data-bs-toggle="tab" href="#active" role="tab">Active</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="history-tab" data-bs-toggle="tab" href="#history" role="tab">History</a>
+        </li>
+    </ul>
+
+    <div class="tab-content mt-3" id="appointmentsTabContent">
+        <!-- Pending Tab -->
+        <div class="tab-pane fade show active" id="pending" role="tabpanel">
+            {% if pending %}
+                <div class="row">
+                    {% for appt in pending %}
+                    <div class="col-md-4 mb-3">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ appt.car_name }}</h5>
+                                <p class="card-text">Rate: PKR{{ appt.rate }}</p>
+                                <p class="card-text">Date: {{ appt.date or 'N/A' }}</p>
+                                <p class="card-text">Time: {{ appt.time or 'N/A' }}</p>
+                                <span class="badge bg-warning text-dark">Pending</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>No pending appointments.</p>
+            {% endif %}
+        </div>
+
+        <!-- Active Tab -->
+        <div class="tab-pane fade" id="active" role="tabpanel">
+            {% if active %}
+                <div class="row">
+                    {% for appt in active %}
+                    <div class="col-md-4 mb-3">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ appt.car_name }}</h5>
+                                <p class="card-text">Rate: PKR{{ appt.rate }}</p>
+                                <p class="card-text">Date: {{ appt.date or 'N/A' }}</p>
+                                <p class="card-text">Time: {{ appt.time or 'N/A' }}</p>
+                                <span class="badge bg-primary">Active</span>
+                                <button class="btn btn-danger btn-sm w-100 mt-2" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#cancelModal" 
+                                    data-appt-id="{{ appt.id }}">
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>No active appointments.</p>
+            {% endif %}
+        </div>
+
+        <!-- History Tab -->
+        <div class="tab-pane fade" id="history" role="tabpanel">
+            {% if history %}
+                <div class="row">
+                    {% for appt in history %}
+                    <div class="col-md-4 mb-3">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ appt.car_name }}</h5>
+                                <p class="card-text">Rate: PKR{{ appt.rate }}</p>
+                                <p class="card-text">Completed On: {{ appt.start_time or 'N/A' }}</p>
+                                <span class="badge bg-success">Completed</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>No completed appointments.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Cancel Confirmation Modal -->
+<div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="cancelForm" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cancelModalLabel">Confirm Cancellation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to cancel this appointment?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No, Keep It</button>
+                    <button type="submit" class="btn btn-danger">Yes, Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    const cancelModal = document.getElementById('cancelModal');
+    cancelModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget;
+        const apptId = button.getAttribute('data-appt-id');
+        const form = cancelModal.querySelector('#cancelForm');
+        form.action = `/cancel/${apptId}`;
+    });
+</script>
+{% endblock %}
